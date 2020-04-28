@@ -21,10 +21,6 @@ test_mysqli_buffered(10, 'users_uuid');
 
 function test_mysqli_buffered($size, $table)
 {
-    $hostname = 'mysql';
-    $username = 'test';
-    $password = 'test123';
-    $dbname = 'testing';
 
     $start = microtime(true);
 
@@ -46,10 +42,6 @@ function test_mysqli_buffered($size, $table)
 
 function test_pdo_buffered($size, $table)
 {
-    $hostname = 'mysql';
-    $username = 'test';
-    $password = 'test123';
-    $dbname = 'testing';
     $options = [
 //        \PDO::ATTR_ERRMODE            => \PDO::ERRMODE_EXCEPTION,
 //        \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
@@ -58,11 +50,6 @@ function test_pdo_buffered($size, $table)
 
     $start = microtime(true);
 
-    $db = new PDO('mysql:host=' . $hostname . ';dbname=' . $dbname . ';charset=utf8', $username, $password, $options);
-
-    if (!$db) {
-        die(sprintf('Connection failed: %s %s', $db->errorCode(), $db->errorInfo()));
-    }
 
     for ($i = $size; $i < $size + 200; $i++) {
         $sql = sprintf('SELECT `name` FROM %s order by `name` DESC LIMIT %d', $table, $i);

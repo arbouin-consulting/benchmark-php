@@ -15,9 +15,11 @@ RUN apk --no-cache update \
 
 WORKDIR $BENCH_HOME
 
-ADD ["./generate-data-fake.php", "./bench-php.php", "./composer.json", "./composer.lock", "./.docker/docker-entrypoint.sh", "$BENCH_HOME/"]
+ADD ["./generate-data-fake.php", "./benchmark/", "./bench.sh", "./composer.json", "./composer.lock", "./.docker/docker-entrypoint.sh", "$BENCH_HOME/"]
 
 RUN composer install -o \
     && ls -l
 
 ENTRYPOINT ["/bin/sh", "/srv/bench/docker-entrypoint.sh"]
+
+CMD ["/bin/sh", "/srv/bench/bench.sh"]
