@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+  php:
+    container_name: php
+    build:
+      context: ./
+      dockerfile: .docker/Dockerfile
+    depends_on:
+      - mysql
+    volumes:
+      - ./bench-php.php:/srv/bench/bench-php.php:rw,cached
+    environment:
+      DB_HOST: mysql:3306
+      DB_DATABASE: testing
+      DB_USERNAME: test
+      DB_PASSWORD: test123
+    working_dir: /srv/bench
+    command: 'php bench-php.php'
+
+  mysql:
+    image: mariadb:10.5
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: 'testing'
+      MYSQL_USER: 'test'
+      MYSQL_PASSWORD: 'test123'
+      MYSQL_ROOT_PASSWORD: 'test'
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: 'mysql'
+      MYSQL_DATABASE: 'testing'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'test'
+      MYSQL_ROOT_PASSWORD: 'test'
+    depends_on:
+      - mysql
+    ports:
+      - 8081:80
